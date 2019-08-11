@@ -26,3 +26,14 @@ class Crawl:
         self.driver.implicitly_wait(3)
 
 
+    # class Semester(enum.Enum):
+    #     spring = 10
+    #     summer = 11
+    #     fall = 20
+    #     winter = 21
+    #     normal = 00
+
+     def main(self):
+         mainView(self.URL + self.mainUri, self.studentNo, self.password)
+         initSubject()
+         crawlSubject()
