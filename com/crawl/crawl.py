@@ -26,7 +26,7 @@ class Crawl:
         self.driver.implicitly_wait(3)
 
 
-    def main(self,seme):
+    def executeCrawl(self,seme):
         self.seme = seme
         self.mainView(self.URL + self.mainUri, self.studentNo, self.password)
         self.initSubject()
