@@ -91,3 +91,14 @@ class Crawl:
         classes = self.driver.find_elements(By.CLASS_NAME, 'classin2')
         classes[lectureNum].click()
         time.sleep(1)
+
+    def getReport(self,subject):
+        self.driver.get(self.URL + self.reportUri)
+        time.sleep(3)
+        html = self.driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+        parse = Parser(subject)
+        parsedData = parse.parsing(soup.select('.datatable.mg_t10.fs_s'), 0)
+        db = DB(subject, self.studentNo)
+        db.insertReport(parsedData)
+        time.sleep(2)
