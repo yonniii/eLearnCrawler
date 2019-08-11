@@ -86,7 +86,7 @@ class Crawl:
             self.getCourse(i)
 
     def selectLecture(self,lectureNo):
-        self.myLecture(self.seme)
+        self.myLecture(self.getSemester(self.seme))
         self.driver.implicitly_wait(3)
         classes = self.driver.find_elements(By.CLASS_NAME, 'classin2')
         classes[lectureNum].click()
