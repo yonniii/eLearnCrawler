@@ -8,9 +8,9 @@ from query import DB
 import enum
 
 class Crawl:
-    def __init__(self, studentNo, password):
-        self.studentNo = studentNo
-        self.password = password
+    def __init__(self, userInfo):
+        self.studentNo = userInfo[0]
+        self.password = userInfo[1]
         self.subject = {}
         self.URL = 'http://e-learn.cnu.ac.kr'
         self.mainUri = '/main/MainView.dunet'
