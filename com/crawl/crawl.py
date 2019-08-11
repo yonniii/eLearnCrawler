@@ -48,3 +48,15 @@ class Crawl:
         self.driver.find_element_by_xpath('//*[@id="login_img"]').click()
         self.time.sleep(2)
 
+    def initSubject(self):
+        slef.myLecture(10)
+        i = 0
+        html = self.driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+        for assign in soup.select("a.classin2"):
+            sub = assign.text.strip()
+            title = sub[0:(len(sub) - 14)]
+            # num = sub[(len(sub)-12):len(sub)-1]
+            self.subject[title] = i
+            i = i + 1
+            print(self.subject[title])
