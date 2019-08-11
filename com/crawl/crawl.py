@@ -34,8 +34,8 @@ class Crawl:
     #     normal = 00
 
      def main(self):
-         mainView(self.URL + self.mainUri, self.studentNo, self.password)
-         initSubject()
+         self.mainView(self.URL + self.mainUri, self.studentNo, self.password)
+         self.initSubject()
          crawlSubject()
 
     def mainView(self,url, id, password):
