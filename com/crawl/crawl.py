@@ -31,6 +31,8 @@ class Crawl:
         self.mainView(self.URL + self.mainUri, self.studentNo, self.password)
         self.initSubject()
         self.crawlSubject()
+        self.driver.quit()
+
 
     def mainView(self,url, id, password):
         self.driver.get(url)
