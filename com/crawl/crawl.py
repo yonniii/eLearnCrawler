@@ -115,3 +115,95 @@ class Crawl:
         db = DB(subject, self.studentNo)
         db.insertLecture(parsedData)
         time.sleep(2)
+
+class Parser:
+    reportColumns = ['num', 'type', 'period', 'isSubmit', 'isInclude', 'isOpen', 'fullScore', 'isProgress', 'title']
+    lectureColumns = ['turn', 'type', 'title', 'time', 'period', 'state']
+    subject =''
+
+    def __init__(self,subject):
+        self.subject= subject
+
+    def parsing(self, data, dataType):
+        rawData = data[0].find("tbody").find_all("tr")  ##공통
+        list = []
+        if dataType == 0:
+            list = self.insertParsedData(rawData, self.parseReportData)
+        elif dataType == 1:
+            list = self.insertParsedData(rawData, self.parseLectureData)  #
+        print(list)
+        return list
+
+    def insertParsedData(self, data, parse):
+        list = []
+        for i in data:
+            list.append(parse(i))
+        return list
+
+    def parseReportData(self, data):
+
+        if data.find(colspan='7') is not None:
+            return
+        tac = data.select(".ta_c")
+        tal = data.select(".ta_l")
+
+        report_item0 = tac[0].text
+        report_item1 = tac[1].text
+        report_item2 = tac[2].text.strip()
+        report_item3 = tac[3].text.strip()
+        report_item4 = tac[4].text.strip()
+        report_item5 = tac[5].text.strip()
+        report_item6 = tac[6].text
+        report_item7 = tac[7].text.strip()
+        report_item8 = tal[0].text.strip()
+
+        report_item= [report_item0, report_item1, report_item2, report_item3, report_item4, report_item5, report_item6,
+             report_item7, report_item8]
+
+        # columns = ['num', 'type', 'period','isSubmit', 'isInclude','isOpen', 'fullScore','isProgress', 'title']
+
+        # table = {}
+        # table['num'] = tac[0].text
+        # table['type'] = tac[1].text
+        # table['period'] = tac[2].text.strip()
+        # table['isSubmit'] = tac[3].text.strip()
+        # table['isInclude'] = tac[4].text.strip()
+        # table['isOpen'] = tac[5].text.strip()
+        # table['fullScore'] = tac[6].text
+        # table['isProgress'] = tac[7].text.strip()
+        # table['title'] = tal[0].text.strip()
+        # return table
+
+        return report_item
+
+    def parseLectureData(self, data):
+        if data.find(colspan='8') is not None:
+            tmp = " ".join(data.text.split())
+            # c = tmp.find('\n')
+            # if not(c is -1):
+            #     tmp=tmp[:c]
+            # return {tmp[0]:tmp}
+            return tmp
+        else:
+            td = data.select('td')
+
+            lecture_item0 = data.select('th')[0].text
+            lecture_item1 = td[0].text.strip()
+            lecture_item2 = " ".join(td[1].text.split())
+            lecture_item3 = td[2].text.strip()
+            lecture_item4 = td[3].text.strip()
+            lecture_item5 = td[4].text.strip()
+
+            lecture_item = [lecture_item0, lecture_item1, lecture_item2, lecture_item3, lecture_item4, lecture_item5 ]
+
+
+            # table = {}
+            # table['turn'] = data.select('th')[0].text
+            # td = data.select('td')
+            # table['type'] = td[0].text.strip()
+            # table['title'] = td[1].text.strip()
+            # table['time'] = td[2].text.strip()
+            # table['period'] = td[3].text.strip()
+            # table['state'] = td[4].text.strip()
+            # return table
+            return lecture_item
