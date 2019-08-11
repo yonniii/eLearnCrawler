@@ -36,7 +36,7 @@ class Crawl:
      def main(self):
          self.mainView(self.URL + self.mainUri, self.studentNo, self.password)
          self.initSubject()
-         crawlSubject()
+         # crawlSubject()
 
     def mainView(self,url, id, password):
         self.driver.get(url)
@@ -60,3 +60,11 @@ class Crawl:
             self.subject[title] = i
             i = i + 1
             print(self.subject[title])
+
+    def myLecture(self,semester):
+        self.driver.get(self.URL + self.myLectureUri)
+        # driver.find_elements(By.CLASS_NAME, 'btn_menu_link.on').click()
+        # driver.find_element(By.linkText("나의강의실")).click()
+        time.sleep(1)
+        self.driver.find_element_by_xpath('//select[@name="term_cd"]/option[@value = "%s"]' % semester).click()  # 학기 선택
+        self.driver.find_element_by_xpath('//*[@id="ing"]').click()
