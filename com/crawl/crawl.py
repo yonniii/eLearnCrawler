@@ -102,3 +102,16 @@ class Crawl:
         db = DB(subject, self.studentNo)
         db.insertReport(parsedData)
         time.sleep(2)
+
+    def getCourse(self,subject):
+        self.driver.get(self.URL + self.courseUri)
+        html = self.driver.page_source
+        soup = BeautifulSoup(html, 'html.parser')
+        parse = Parser(subject)
+        parsedData = parse.parsing(soup.select('.datatable.mg_t10.fs_s.bo_rn'), 1)
+        # if not parsedData or (parsedData[0] is None):
+        #     print("데이터 없더라")
+        # else:
+        db = DB(subject, self.studentNo)
+        db.insertLecture(parsedData)
+        time.sleep(2)
