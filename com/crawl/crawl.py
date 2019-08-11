@@ -49,7 +49,7 @@ class Crawl:
         self.time.sleep(2)
 
     def initSubject(self):
-        slef.myLecture(10)
+        self.myLecture(10)
         i = 0
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
