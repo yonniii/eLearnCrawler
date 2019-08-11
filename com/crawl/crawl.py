@@ -46,7 +46,7 @@ class Crawl:
         self.driver.find_element_by_name('pass').send_keys(password)  # 비번
         self.driver.implicitly_wait(5)
         self.driver.find_element_by_xpath('//*[@id="login_img"]').click()
-        self.time.sleep(2)
+        time.sleep(2)
 
     def initSubject(self):
         self.myLecture(10)
