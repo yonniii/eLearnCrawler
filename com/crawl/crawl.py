@@ -29,7 +29,7 @@ class Crawl:
     def main(self,seme):
         self.mainView(self.URL + self.mainUri, self.studentNo, self.password)
         self.initSubject(seme)
-         # crawlSubject()
+        self.crawlSubject()
 
     def mainView(self,url, id, password):
         self.driver.get(url)
@@ -75,3 +75,11 @@ class Crawl:
         elif seme is 'normal':
             return 00
         return 10
+
+    def crawlSubject(self):
+        for i in self.subject.keys():
+            print(i)
+            self.selectLecture(self.subject[i])
+            self.getReport(i)
+            time.sleep(5)
+            self.getCourse(i)
