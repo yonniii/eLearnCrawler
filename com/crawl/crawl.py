@@ -26,16 +26,9 @@ class Crawl:
         self.driver.implicitly_wait(3)
 
 
-    # class Semester(enum.Enum):
-    #     spring = 10
-    #     summer = 11
-    #     fall = 20
-    #     winter = 21
-    #     normal = 00
-
-    def main(self):
+    def main(self,seme):
         self.mainView(self.URL + self.mainUri, self.studentNo, self.password)
-        self.initSubject()
+        self.initSubject(seme)
          # crawlSubject()
 
     def mainView(self,url, id, password):
@@ -48,8 +41,8 @@ class Crawl:
         self.driver.find_element_by_xpath('//*[@id="login_img"]').click()
         time.sleep(2)
 
-    def initSubject(self):
-        self.myLecture(10)
+    def initSubject(self,seme):
+        self.myLecture(self.getSemester(seme))
         i = 0
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -68,3 +61,17 @@ class Crawl:
         time.sleep(1)
         self.driver.find_element_by_xpath('//select[@name="term_cd"]/option[@value = "%s"]' % semester).click()  # 학기 선택
         self.driver.find_element_by_xpath('//*[@id="ing"]').click()
+
+    def getSemester(self,semester):
+        seme =semester
+        if seme is 'spring':
+            return 10
+        elif seme is 'summer':
+            return 11
+        elif seme is 'fall':
+            return 20
+        elif seme is 'winter':
+            return 21
+        elif seme is 'normal':
+            return 00
+        return 10
