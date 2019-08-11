@@ -27,8 +27,9 @@ class Crawl:
 
 
     def main(self,seme):
+        self.seme = seme
         self.mainView(self.URL + self.mainUri, self.studentNo, self.password)
-        self.initSubject(seme)
+        self.initSubject()
         self.crawlSubject()
 
     def mainView(self,url, id, password):
@@ -41,8 +42,8 @@ class Crawl:
         self.driver.find_element_by_xpath('//*[@id="login_img"]').click()
         time.sleep(2)
 
-    def initSubject(self,seme):
-        self.myLecture(self.getSemester(seme))
+    def initSubject(self):
+        self.myLecture(self.getSemester(self.seme))
         i = 0
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
