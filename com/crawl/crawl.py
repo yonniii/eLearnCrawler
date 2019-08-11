@@ -37,3 +37,14 @@ class Crawl:
          mainView(self.URL + self.mainUri, self.studentNo, self.password)
          initSubject()
          crawlSubject()
+
+    def mainView(self,url, id, password):
+        self.driver.get(url)
+        self.driver.implicitly_wait(3)
+        self.driver.find_element_by_xpath('//*[@id="pop_login"]').click()
+        self.driver.find_element_by_name('id').send_keys(id)  # 학번
+        self.driver.find_element_by_name('pass').send_keys(password)  # 비번
+        self.driver.implicitly_wait(5)
+        self.driver.find_element_by_xpath('//*[@id="login_img"]').click()
+        self.time.sleep(2)
+
