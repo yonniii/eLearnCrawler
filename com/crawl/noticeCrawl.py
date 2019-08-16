@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 from bs4 import BeautifulSoup
 import requests
+from query import DB
 
 
 class noticeCrawl:
@@ -16,7 +17,20 @@ class noticeCrawl:
         html = req.text
         return BeautifulSoup(html, 'html.parser')
 
-    def parsing(self,url):
+    def getURL(self,type):
+        if type=='barchelor':
+            return self.bachelorURL
+        elif type=='notice':
+            return self.noticeURL
+        elif type=='project':
+            return self.projectURL
+        elif type=='job':
+            return self.jobURL
+        elif type =='cse':
+            return self.cseURL
+
+    def parsing(self,type):
+        url = self.getURL(type)
         soup = self.getPage(url)
         rows = soup.select('tbody>tr')
         list=[]
@@ -24,11 +38,11 @@ class noticeCrawl:
             data=i.select('td')
             title = data[1].find('a')
             list.append([ " ".join(title.text.split()), url+title['href'], data[3].text,data[4].text])
-        print(list)
+        # print(list)
+        db = DB(None,None)
+        db.insertNotice(list,type)
 
-
-        # print(rows)
-
+list = ['barchelor','notice','project','job','cse']
 noti = noticeCrawl()
-noti.parsing(noti.bachelorURL)
-noti.parsing(noti.noticeURL)
+for i in list:
+    noti.parsing(i)

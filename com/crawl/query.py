@@ -21,7 +21,7 @@ class DB:
         self.studentNo = studentNo
 
     def insertLecture(self, dataList):
-        if  not dataList or dataList[0] is None:
+        if not dataList or dataList[0] is None:
             print('nonData')
             return None
         sql = """INSERT INTO `eLearn`.`lectures`
@@ -72,7 +72,8 @@ now(),
                 turn = int(data[0].split()[0])
                 id = '%s-%s-%s-%s' % (self.studentNo, self.subject, week, turn)  # 학번,과목,주차,회차 /순서
                 id = id.replace(' ', '')
-                if self.isExist('lectures','id', id) :
+                if self.isExist('lectures', 'id', id):
+                    # self.deleteData(data)
                     print("이미 있음")
                     continue
                 title = data[2]
@@ -81,7 +82,7 @@ now(),
                 type = data[1]
                 state = data[5]
                 if data[3] is '':
-                    runningtime='null'
+                    runningtime = 'null'
                 else:
                     runningtime = int(data[3].replace('분', ''))
                 # if title is '':
@@ -89,8 +90,6 @@ now(),
                 #     start_time='null'
                 #     end_time='null'
                 #     state='null'
-
-
 
                 # id = '%s-%s-%s-%s' % (self.studentNo, self.subject, week, int(data[0].split()[0]))
                 # value = "('%s', '%s', '%s', '%s', '%s', '%s', '%s', now() , %d, '%s', %d, %d)" \
@@ -128,6 +127,10 @@ now(),
             else:
                 week = int(data.split()[0])
 
+    def deleteData(self, table, id):
+        sql = """DELETE FROM %s WHERE id='%s'""" % (table, id)
+        self.executeQuery(sql)
+
     # data[3].replace('분', '')
     def insertReport(self, dataList):  # timestamp는 now() 쓰셈
         if dataList[0] is None or not dataList:
@@ -155,8 +158,9 @@ VALUES
         for data in dataList:
             report_no = int(data[0])
             id = '%s-%s-%d' % (self.studentNo, self.subject, report_no)
-            id= id.replace(' ','')
-            if self.isExist('reports', 'id',id):
+            id = id.replace(' ', '')
+            if self.isExist('reports', 'id', id):
+                # self.deleteData(data)
                 print("이미 있음")
                 continue
                 ################
@@ -189,28 +193,28 @@ VALUES
 
         print(self.cursor.lastrowid)
 
-    # def insertReport(self, dataList):  # timestamp는 now() 쓰셈
-    #     sql = '''INSERT INTO reports VALUES %s'''
-    #     for data in dataList:
-    #         value = "('%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', %d, '%s', now())" % (
-    #             self.studentNo, '%s-%s-%d' % (self.studentNo, self.subject, int(data[0])), data[8],
-    #             (data[2])[:14] + ':00',
-    #             (data[2])[17:] + ':00', data[1],
-    #             self.subject, int(data[0]), data[3], data[4], data[5], int(data[6].replace('점', '')), data[7]
-    #         )
-    #         print(sql % (value))
-    #         self.executeQuery(sql % (value))
-    #
-    #     print(self.cursor.lastrowid)
+    def insertNotice(self, dataList, type):
+        sql = """INSERT INTO `notices`(`type`, `title`, `url`, `writter`, `date`, `updated_time`) VALUES ('%s','%s','%s','%s','%s',now())"""
+        for data in dataList:
+            title = data[0]
+            url = data[1]
+            writter = data[2]
+            date = data[3]
+            value = sql % (type,
+                           title,
+                           url,
+                           writter,
+                           date)
+            print(value)
+            self.executeQuery(value)
 
-    def isExist(self,table, filde,value):
-        sql="""select EXISTS (SELECT * FROM %s WHERE %s = '%s') as success""" % (
+    def isExist(self, table, filde, value):
+        sql = """select EXISTS (SELECT * FROM %s WHERE %s = '%s') as success""" % (
             table, filde, value
         )
         print(sql)
         self.executeQuery(sql)
         return self.cursor.fetchone()[0]
-
 
     def executeQuery(self, sql):
         self.cursor.execute(sql)
