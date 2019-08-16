@@ -19,8 +19,8 @@ class Crawl:
         self.reportUri = '/lms/class/report/stud/doListView.dunet'
         self.courseUri = '/lms/class/courseSchedule/doListView.dunet'
         chrome_options = webdriver.ChromeOptions()
-        # chrome_options.add_argument('headless')
-        # chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('headless')
+        chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('lang=ko_KR')
         self.driver = webdriver.Chrome('C:/chromedriver/chromedriver', chrome_options=chrome_options)
         self.driver.implicitly_wait(3)
