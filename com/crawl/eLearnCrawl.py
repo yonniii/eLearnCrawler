@@ -84,7 +84,7 @@ class Crawl:
             print(i)
             self.selectLecture(self.subject[i])
             self.getReport(i)
-            time.sleep(5)
+            # time.sleep(5)
             self.getCourse(i)
 
     def selectLecture(self,lectureNo):
