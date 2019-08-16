@@ -37,7 +37,10 @@ class noticeCrawl:
         for i in rows:
             data=i.select('td')
             title = data[1].find('a')
-            list.append([ " ".join(title.text.split()), url+title['href'], data[3].text,data[4].text])
+            titleTxt = " ".join(title.text.split())
+            titleTxt = titleTxt.replace("'","")
+            print(titleTxt)
+            list.append([ titleTxt, url+title['href'], data[3].text,data[4].text])
         # print(list)
         db = DB(None,None)
         db.insertNotice(list,type)
