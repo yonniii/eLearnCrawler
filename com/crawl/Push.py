@@ -1,7 +1,8 @@
 import requests
 import json
 
-class SendPush:
+
+class Push:
     def sendFcmNotification(self,ids,title,body):
         url = 'https://fcm.googleapis.com/fcm/send'
         headers = {
@@ -21,5 +22,5 @@ class SendPush:
 ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
 title = 'test'
 body = 'please'
-send = SendPush()
-send.sendFcmNotification(ids,title,body)
+push = Push()
+push.sendFcmNotification(ids, title, body)
