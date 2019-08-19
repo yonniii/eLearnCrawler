@@ -194,7 +194,7 @@ VALUES
         print(self.cursor.lastrowid)
 
     def insertNotice(self, dataList, type):
-        sql = """INSERT INTO `notices`(`type`, `title`, `url`, `writter`, `date`, `updated_time`) VALUES ('%s','%s','%s','%s','%s',now())"""
+        sql = """INSERT INTO `notices`(`type`, `title`, `url`, `writter`, `date`, `updated_time`,`num`) VALUES ('%s','%s','%s','%s','%s',now(),%d)"""
         for data in dataList:
             title = data[0]
             url = data[1]
