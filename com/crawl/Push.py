@@ -41,7 +41,7 @@ class CheckPush:
         # print(self.cursor.fetchall())
         return self.cursor.fetchall()
 
-    def push(self):
+    def pushDue(self):
         ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
         push = Push()
         list = self.timeDiff('reports',1,'day')
@@ -49,6 +49,13 @@ class CheckPush:
             title = i[1] + ' 마감 1일 전'
             body = i[1] + ' 마감 1일 전'
             push.sendFcmNotification(ids, title, body)
+
+    def pushNewNotice(self,data):
+        ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
+        push = Push()
+        title = '[새 공지 알림]'
+        body =data[0]
+        push.sendFcmNotification(ids, title, body)
 
     def executeQuery(self, sql):
         self.cursor.execute(sql)
