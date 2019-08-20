@@ -41,7 +41,16 @@ class CheckPush:
         # print(self.cursor.fetchall())
         return self.cursor.fetchall()
 
-    def pushDue(self):
+    def DueDate(self, studentNo):
+        sql = """SELECT `time` FROM `alarm` WHERE `id` = '%s' ORDER BY `seq` DESC LIMIT 1""" % (studentNo)
+        self.executeQuery(sql)
+        due = self.cursor.fetchone()[0]
+        if due == '이틀 전':
+            return 2
+        else:
+            return int(due[0])
+
+    def pushDue(self, studentNo, type):
         ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
         push = Push()
         list = self.timeDiff('reports',1,'day')
