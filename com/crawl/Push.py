@@ -50,9 +50,13 @@ class CheckPush:
             return 2
         else:
             return int(due[0])
+    def getToken(self,studentNo):
+        sql = """SELECT `token` FROM `token` WHERE `id`='%s'"""%(studentNo)
+        self.executeQuery(sql)
+        return self.cursor.fetchone()[0]
 
     def pushDue(self, studentNo, type):
-        ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
+        ids = self.getToken(studentNo)
         push = Push()
         # title = '<과제title> 마감 1일 전'
         # body =  '미제출 과제 <과제title> 마감이 1일 남았습니다.'
@@ -86,7 +90,6 @@ class CheckPush:
 # ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
 # title = 'test'
 # body = 'please'
-# push = Push()
 # # push.sendFcmNotification(ids, title, body)
 #
 # ch = CheckPush()
