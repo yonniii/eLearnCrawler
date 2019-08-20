@@ -33,22 +33,55 @@ class CheckPush:
                                   charset='utf8')
         self.cursor = self.db.cursor()
 
-    def timeDiff(self, table, intval, type):
-        intervalListsql = """SELECT * FROM `%s` WHERE `is_submit`='미제출' and `end_time` BETWEEN DATE_ADD(NOW(),INTERVAL %d %s) AND DATE_ADD(NOW(),INTERVAL %d %s)""" % (
-        table, intval, type, intval+1, type)
+    def timeDiff(self, table, studentNo, state, intval, type):
+        intervalListsql = """SELECT * FROM `%s` WHERE `stdnt_no`='%s' and %s and `end_time` BETWEEN DATE_ADD(NOW(),INTERVAL %d %s) AND DATE_ADD(NOW(),INTERVAL %d %s)""" % (
+            table, studentNo, state, intval, type, intval + 1, type)
+        print(intervalListsql)
         # ss = """SELECT * FROM `reports` WHERE `end_time` BETWEEN DATE_ADD(NOW(),INTERVAL 1 DAY) AND DATE_ADD(NOW(),INTERVAL 2 DAY)"""
         self.executeQuery(intervalListsql)
         # print(self.cursor.fetchall())
         return self.cursor.fetchall()
 
-    def push(self):
+    def DueDate(self, studentNo):
+        sql = """SELECT `time` FROM `alarm` WHERE `id` = '%s' ORDER BY `seq` DESC LIMIT 1""" % (studentNo)
+        self.executeQuery(sql)
+        due = self.cursor.fetchone()[0]
+        if due == '이틀 전':
+            return 2
+        else:
+            return int(due[0])
+    def getToken(self,studentNo):
+        sql = """SELECT `token` FROM `token` WHERE `id`='%s'"""%(studentNo)
+        self.executeQuery(sql)
+        return self.cursor.fetchone()[0]
+
+    def pushDue(self, studentNo, type):
+        ids = self.getToken(studentNo)
+        push = Push()
+        # title = '<과제title> 마감 1일 전'
+        # body =  '미제출 과제 <과제title> 마감이 1일 남았습니다.'
+        # push.sendFcmNotification(ids, title, body)
+        dueDate = self.DueDate(studentNo)
+        if type == 'reports':
+            list = self.timeDiff(type,studentNo, "`is_submit`='미제출'", dueDate, 'day')
+            # for i in list:
+            #     title = '['+type+'] 마감이 '+str(dueDate)+'일 남은 '+type+'가 있습니다.'
+            #     body = i[2]+'마감이 '+str(dueDate)+'일 남았습니다.'
+            #     push.sendFcmNotification(ids, title, body)
+        elif type == 'lectures':
+            list = self.timeDiff(type,studentNo, "`state`='미수강'", dueDate, 'day')
+
+        for i in list:
+            title = '[' + type + '] 마감이 ' + str(dueDate) + '일 남은 ' + type + '가 있습니다.'
+            body = i[2] + '마감이 ' + str(dueDate) + '일 남았습니다.'
+            push.sendFcmNotification(ids, title, body)
+
+    def pushNewNotice(self,data):
         ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
         push = Push()
-        list = self.timeDiff('reports',1,'day')
-        for i in list:
-            title = i[1] + ' 마감 1일 전'
-            body = i[1] + ' 마감 1일 전'
-            push.sendFcmNotification(ids, title, body)
+        title = '[새 공지 알림]'
+        body =data[0]
+        push.sendFcmNotification(ids, title, body)
 
     def executeQuery(self, sql):
         self.cursor.execute(sql)
@@ -57,7 +90,6 @@ class CheckPush:
 # ids = 'e_yTrAZmLBg:APA91bH_niAX51L10gLi1iXMccpNGjF9XfI34Xws_TnNAsb62r9FaF2iV2IE3eq_ISe4VoH5Irom6pAAIoNP1PWLV4EnnMtesIkBl_2bnqHTqjs5EJHgU897Q-W4gR7LhgmGoj04aFVL'
 # title = 'test'
 # body = 'please'
-# push = Push()
 # # push.sendFcmNotification(ids, title, body)
 #
 # ch = CheckPush()

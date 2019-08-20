@@ -1,5 +1,5 @@
 import pymysql
-
+from Push import CheckPush
 
 class DB:
     # db = pymysql.connect(host='ec2-54-180-87-74.ap-northeast-2.compute.amazonaws.com',
@@ -194,17 +194,27 @@ VALUES
         print(self.cursor.lastrowid)
 
     def insertNotice(self, dataList, type):
-        sql = """INSERT INTO `notices`(`type`, `title`, `url`, `writter`, `date`, `updated_time`) VALUES ('%s','%s','%s','%s','%s',now())"""
+        sql = """INSERT INTO `notices`(`type`, `title`, `url`, `writter`, `date`, `updated_time`,`num`) VALUES ('%s','%s','%s','%s','%s',now(),%d)"""
         for data in dataList:
             title = data[0]
             url = data[1]
             writter = data[2]
             date = data[3]
-            value = sql % (type,
-                           title,
-                           url,
-                           writter,
-                           date)
+            num = data[4]
+            if num == '공지':
+                num = 999999
+            if not self.isExist('notices', 'url', url):
+                value = sql % (type,
+                               title,
+                               url,
+                               writter,
+                               date,
+                               int(num))
+                ch = CheckPush()
+                ch.pushNewNotice(data)
+            else:
+                value = "UPDATE `notices` SET `title`='%s',`writter`='%s',`date`='%s',`updated_time`=now(),`num`=%d WHERE url = '%s'" % (
+                    title, writter, date, int(num), url)
             print(value)
             self.executeQuery(value)
 
