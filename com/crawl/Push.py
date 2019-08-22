@@ -46,8 +46,12 @@ class CheckPush:
         sql = """SELECT `time` FROM `alarm` WHERE `id` = '%s' ORDER BY `seq` DESC LIMIT 1""" % (studentNo)
         self.executeQuery(sql)
         due = self.cursor.fetchone()[0]
-        if due == '이틀 전':
+        if due=='하루 전':
+            return 1
+        elif due == '이틀 전':
             return 2
+        elif due=='일주일 전':
+            return 7
         else:
             return int(due[0])
     def getToken(self,studentNo):
